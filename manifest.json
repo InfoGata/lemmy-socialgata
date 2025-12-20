@@ -1,0 +1,8 @@
+{
+  "id": "3YKmz8pL4Rwd",
+  "name": "Lemmy Plugin for SocialGata",
+  "version": "1.0.0",
+  "description": "Browse Lemmy feeds, communities, and comments across multiple instances",
+  "script": "dist/index.js",
+  "options": "dist/options.html"
+}
