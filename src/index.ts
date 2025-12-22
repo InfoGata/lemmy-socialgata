@@ -142,7 +142,7 @@ interface GetPostsResponse {
   next_page?: string;
 }
 
-interface GetCommentsResponse {
+interface LemmyCommentsResponse {
   comments: LemmyCommentView[];
 }
 
@@ -151,7 +151,7 @@ interface GetPostResponse {
   community_view: LemmyCommunityView;
 }
 
-interface GetCommunityResponse {
+interface LemmyCommunityResponse {
   community_view: LemmyCommunityView;
 }
 
@@ -337,7 +337,7 @@ const getCommunity = async (
   const communityUrl = new URL(`${baseUrl}/api/v3/community`);
   communityUrl.searchParams.append("name", request.apiId);
   const communityResponse = await application.networkRequest(communityUrl.toString());
-  const communityJson: GetCommunityResponse = await communityResponse.json();
+  const communityJson: LemmyCommunityResponse = await communityResponse.json();
 
   // Get posts
   const postsUrl = new URL(`${baseUrl}/api/v3/post/list`);
@@ -370,19 +370,19 @@ const getComments = async (
 
   // Get post details
   const postUrl = new URL(`${baseUrl}/api/v3/post`);
-  postUrl.searchParams.append("id", request.apiId);
+  postUrl.searchParams.append("id", request.apiId ?? "");
   const postResponse = await application.networkRequest(postUrl.toString());
   const postJson: GetPostResponse = await postResponse.json();
 
   // Get comments
   const commentsUrl = new URL(`${baseUrl}/api/v3/comment/list`);
   commentsUrl.searchParams.append("type_", "All");
-  commentsUrl.searchParams.append("post_id", request.apiId);
+  commentsUrl.searchParams.append("post_id", request.apiId ?? "");
   commentsUrl.searchParams.append("sort", "Hot");
   commentsUrl.searchParams.append("max_depth", "8");
 
   const commentsResponse = await application.networkRequest(commentsUrl.toString());
-  const commentsJson: GetCommentsResponse = await commentsResponse.json();
+  const commentsJson: LemmyCommentsResponse = await commentsResponse.json();
 
   const posts = commentsJson.comments.map(lemmyCommentToPost);
   const items = buildCommentTree(posts);
@@ -397,7 +397,7 @@ const getComments = async (
   };
 };
 
-const getUser = async (request: GetUserRequest): Promise<GetUserReponse> => {
+const getUser = async (request: GetUserRequest): Promise<GetUserResponse> => {
   const baseUrl = getBaseUrl();
   const perPage = 30;
   const page = 1;
