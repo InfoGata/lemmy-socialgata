@@ -4,5 +4,7 @@
   "version": "1.0.0",
   "description": "Browse Lemmy feeds, communities, and comments across multiple instances",
   "script": "dist/index.js",
-  "options": "dist/options.html"
+  "options": "dist/options.html",
+  "updateUrl": "https://cdn.jsdelivr.net/gh/InfoGata/lemmy-socialgata@latest/manifest.json",
+  "homepage": "https://github.com/InfoGata/lemmy-socialgata"
 }
