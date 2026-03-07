@@ -329,7 +329,10 @@ const getInstances = async (): Promise<GetInstancesResponse> => {
 const getCommunity = async (
   request: GetCommunityRequest
 ): Promise<GetCommunityResponse> => {
-  const baseUrl = getBaseUrl();
+  let baseUrl = getBaseUrl();
+  if (request.instanceId) {
+    baseUrl = `https://${request.instanceId}`;
+  }
   const perPage = 30;
   const page = Number(request.pageInfo?.page || 1);
 
@@ -366,7 +369,10 @@ const getCommunity = async (
 const getComments = async (
   request: GetCommentsRequest
 ): Promise<GetCommentsResponse> => {
-  const baseUrl = getBaseUrl();
+  let baseUrl = getBaseUrl();
+  if (request.instanceId) {
+    baseUrl = `https://${request.instanceId}`;
+  }
 
   // Get post details
   const postUrl = new URL(`${baseUrl}/api/v3/post`);
@@ -398,7 +404,10 @@ const getComments = async (
 };
 
 const getUser = async (request: GetUserRequest): Promise<GetUserResponse> => {
-  const baseUrl = getBaseUrl();
+  let baseUrl = getBaseUrl();
+  if (request.instanceId) {
+    baseUrl = `https://${request.instanceId}`;
+  }
   const perPage = 30;
   const page = 1;
 
@@ -421,7 +430,10 @@ const getUser = async (request: GetUserRequest): Promise<GetUserResponse> => {
 };
 
 const search = async (request: SearchRequest): Promise<SearchResponse> => {
-  const baseUrl = getBaseUrl();
+  let baseUrl = getBaseUrl();
+  if (request.instanceId) {
+    baseUrl = `https://${request.instanceId}`;
+  }
   const page = Number(request.pageInfo?.page || 1);
 
   const searchUrl = new URL(`${baseUrl}/api/v3/search`);
