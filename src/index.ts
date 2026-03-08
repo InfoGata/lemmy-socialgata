@@ -283,13 +283,15 @@ const getFeed = async (request?: GetFeedRequest): Promise<GetFeedResponse> => {
   }
 
   const perPage = 30;
-  const page = Number(request?.pageInfo?.page || 1);
+  const pageCursor = request?.pageInfo?.page as string | undefined;
 
   const apiUrl = new URL(`${url}/api/v3/post/list`);
   apiUrl.searchParams.append("type_", "Local");
   apiUrl.searchParams.append("sort", "Active");
   apiUrl.searchParams.append("limit", perPage.toString());
-  apiUrl.searchParams.append("page", page.toString());
+  if (pageCursor) {
+    apiUrl.searchParams.append("page_cursor", pageCursor);
+  }
 
   const response = await application.networkRequest(apiUrl.toString());
   const json: GetPostsResponse = await response.json();
@@ -298,9 +300,7 @@ const getFeed = async (request?: GetFeedRequest): Promise<GetFeedResponse> => {
   return {
     items,
     pageInfo: {
-      page: page,
       nextPage: json.next_page,
-      prevPage: page > 1 ? page - 1 : undefined,
     },
   };
 };
