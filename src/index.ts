@@ -2,7 +2,6 @@ import { MessageType, UiMessageType } from "./shared";
 import Showdown from "showdown";
 
 const markdownConverter = new Showdown.Converter();
-const pluginName = "lemmy";
 const DEFAULT_INSTANCE = "https://lemmy.ml";
 const LEMMY_INSTANCE_KEY = "lemmy_instance";
 
@@ -247,7 +246,6 @@ const lemmyPostToPost = (postView: LemmyPostView): Post => {
     numOfComments: postView.counts.comments,
     authorApiId: postView.creator.name,
     authorName: postView.creator.name,
-    pluginId: pluginName,
     originalUrl: postView.post.ap_id,
     publishedDate: postView.post.published,
     url: postView.post.url,
@@ -264,7 +262,6 @@ const lemmyCommentToPost = (commentView: LemmyCommentView): Post => {
     authorName: commentView.creator.name,
     authorAvatar: commentView.creator.avatar,
     apiId: commentView.comment.id.toString(),
-    pluginId: pluginName,
     score: commentView.counts.score,
     numOfComments: commentView.counts.child_count,
     originalUrl: commentView.comment.ap_id,
