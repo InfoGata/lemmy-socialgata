@@ -1,4 +1,5 @@
 import { MessageType, UiMessageType } from "./shared";
+import { hostAllowsNsfw } from "./lib/nsfw";
 import {
   buildCommentTree,
   lemmyCommentToPost,
@@ -113,6 +114,11 @@ const getFeed = async (request?: GetFeedRequest): Promise<GetFeedResponse> => {
   apiUrl.searchParams.append("sort", "Active");
   apiUrl.searchParams.append("limit", perPage.toString());
   apiUrl.searchParams.append("page", page.toString());
+  // Only sent when the reader has asked for adult content to be left out.
+  // Omitted otherwise so the instance's own default still applies.
+  if (!(await hostAllowsNsfw())) {
+    apiUrl.searchParams.append("show_nsfw", "false");
+  }
 
   const response = await application.networkRequest(apiUrl.toString());
   const json: GetPostsResponse = await response.json();
@@ -171,6 +177,9 @@ const getCommunity = async (
   postsUrl.searchParams.append("limit", perPage.toString());
   postsUrl.searchParams.append("page", page.toString());
   postsUrl.searchParams.append("community_name", request.apiId);
+  if (!(await hostAllowsNsfw())) {
+    postsUrl.searchParams.append("show_nsfw", "false");
+  }
 
   const postsResponse = await application.networkRequest(postsUrl.toString());
   const postsJson: GetPostsResponse = await postsResponse.json();
@@ -179,6 +188,7 @@ const getCommunity = async (
     community: {
       apiId: request.apiId,
       name: communityJson.community_view.community.name,
+      nsfw: communityJson.community_view.community.nsfw || undefined,
     },
     items: postsJson.posts.map(lemmyPostToPost),
     pageInfo: {

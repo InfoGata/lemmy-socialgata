@@ -163,6 +163,7 @@ export const lemmyPostToPost = (postView: LemmyPostView): Post => {
     thumbnailUrl: postView.post.thumbnail_url,
     authorAvatar: postView.creator.avatar,
     body: postView.post.body,
+    nsfw: postView.post.nsfw || undefined,
   };
 };
 
